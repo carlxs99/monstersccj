@@ -7,7 +7,7 @@ type SyncInput = { initData: string; name?: string; startParam?: string };
 
 /** Public bot handle + Mini App short name, used to build referral deep links. */
 export const getBotUsername = createServerFn({ method: "GET" }).handler(async () => {
-  const username = (process.env["TELEGRAM_BOT_USERNAME"] ?? "Monstersccjbot").replace("@", "");
+  const username = (process.env["TELEGRAM_BOT_USERNAME"] ?? "MonstersCardsBot").replace("@", "");
   const appName = (process.env["TELEGRAM_APP_NAME"] ?? "app").replace("/", "");
   return { username, appName, base: `https://t.me/${username}/${appName}` };
 });

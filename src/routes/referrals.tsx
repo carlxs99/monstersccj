@@ -11,13 +11,13 @@ import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/referrals")({
   head: () => ({
     meta: [
-      { title: "Referrals — Monsters CCJ" },
+      { title: "Referrals — Monsters Cards" },
       {
         name: "description",
         content:
-          "Invite friends to Monsters CCJ and earn 10% of level 1 purchases, 5% of level 2 and 1% of level 3 — paid in GRAM.",
+          "Invite friends to Monsters Cards and earn 10% of level 1 purchases, 5% of level 2 and 1% of level 3 — paid in GRAM.",
       },
-      { property: "og:title", content: "Referrals — Monsters CCJ" },
+      { property: "og:title", content: "Referrals — Monsters Cards" },
       { property: "og:description", content: "Earn GRAM commissions from three referral levels." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -69,7 +69,7 @@ function ReferralsPage() {
 
   useEffect(() => {
     let alive = true;
-    const fallback = `https://t.me/Monstersccjbot/app?startapp=${player.referralCode}`;
+    const fallback = `https://t.me/MonstersCardsBot/app?startapp=${player.referralCode}`;
     getBotUsername()
       .then((res) => {
         if (!alive) return;

@@ -19,7 +19,7 @@ function manifestUrl() {
 }
 
 /** Deep link back into the Mini App, so wallets return the player to Telegram. */
-const TWA_RETURN_URL = "https://t.me/Monstersccjbot/app";
+const TWA_RETURN_URL = "https://t.me/MonstersCardsBot/app";
 
 export default function TonConnectSection(props: Props) {
   return (

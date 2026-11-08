@@ -40,7 +40,7 @@ export const Route = createFileRoute("/api/public/telegram/webhook")({
         const text = (message.text ?? "").trim();
         const command = text.split(/\s+/)[0]?.toLowerCase().replace(/@.*$/, "") ?? "";
         const playButton = {
-          inline_keyboard: [[{ text: "🎴 Play Monsters CCJ", web_app: { url: APP_URL } }]],
+          inline_keyboard: [[{ text: "🎴 Play Monsters Cards", web_app: { url: APP_URL } }]],
         };
 
         const send = (payload: Record<string, unknown>) =>
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/api/public/telegram/webhook")({
           const name = message.from?.first_name ? `, ${message.from.first_name}` : "";
           await send({
             text:
-              `🐲 <b>Welcome to Monsters CCJ${name}!</b>\n` +
+              `🐲 <b>Welcome to Monsters Cards${name}!</b>\n` +
               "<i>Collect. Produce. Trade. Battle.</i>\n\n" +
               "🎴 Discover <b>205 original cards</b>: 170 creatures and 35 trainers\n" +
               "🌌 Every card has its own exclusive artwork and unique world\n" +
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/api/public/telegram/webhook")({
 
         } else if (command === "/invite") {
           const code = codeFor(userId);
-          const botName = (process.env["TELEGRAM_BOT_USERNAME"] ?? "Monstersccjbot").replace(
+          const botName = (process.env["TELEGRAM_BOT_USERNAME"] ?? "MonstersCardsBot").replace(
             "@",
             "",
           );
@@ -103,7 +103,7 @@ export const Route = createFileRoute("/api/public/telegram/webhook")({
             reply_markup: playButton,
           });
         } else {
-          await send({ text: "Tap below to open Monsters CCJ.", reply_markup: playButton });
+          await send({ text: "Tap below to open Monsters Cards.", reply_markup: playButton });
         }
 
         return Response.json({ ok: true });

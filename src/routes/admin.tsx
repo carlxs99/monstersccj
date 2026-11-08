@@ -45,9 +45,9 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Admin — Monsters CCJ" },
-      { name: "description", content: "Private administration panel for Monsters CCJ operators." },
-      { property: "og:title", content: "Admin — Monsters CCJ" },
+      { title: "Admin — Monsters Cards" },
+      { name: "description", content: "Private administration panel for Monsters Cards operators." },
+      { property: "og:title", content: "Admin — Monsters Cards" },
       { property: "og:description", content: "Private administration panel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -142,7 +142,7 @@ function AdminPage() {
   return (
     <AppShell>
       <div className="px-5 pt-5">
-        <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-dim">Monsters CCJ</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-dim">Monsters Cards</p>
         <h1 className="mt-1 font-display text-2xl font-extrabold leading-none tracking-tight">
           Admin panel
         </h1>

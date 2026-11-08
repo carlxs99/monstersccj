@@ -12,13 +12,13 @@ import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/packs")({
   head: () => ({
     meta: [
-      { title: "Pack shop — Monsters CCJ" },
+      { title: "Pack shop — Monsters Cards" },
       {
         name: "description",
         content:
           "Nine booster packs from 0.5 to 50 GRAM, with the price, card count and possible rarities shown before every purchase.",
       },
-      { property: "og:title", content: "Pack shop — Monsters CCJ" },
+      { property: "og:title", content: "Pack shop — Monsters Cards" },
       {
         property: "og:description",
         content: "Nine booster packs priced in GRAM, from starter sleeves to legendary foils.",

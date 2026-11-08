@@ -24,13 +24,13 @@ import {
 export const Route = createFileRoute("/battle")({
   head: () => ({
     meta: [
-      { title: "Battle Arena — Monsters CCJ" },
+      { title: "Battle Arena — Monsters Cards" },
       {
         name: "description",
         content:
-          "Duel other Monsters CCJ collectors: wager GRAM, pick three creatures and fight turn by turn. Winner takes the whole pot.",
+          "Duel other Monsters Cards collectors: wager GRAM, pick three creatures and fight turn by turn. Winner takes the whole pot.",
       },
-      { property: "og:title", content: "Battle Arena — Monsters CCJ" },
+      { property: "og:title", content: "Battle Arena — Monsters Cards" },
       {
         property: "og:description",
         content: "Turn-based PvP duels with GRAM wagers and no house fee.",

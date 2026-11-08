@@ -27,14 +27,14 @@ export function AppShell({
         <Link to="/" className="flex min-w-0 flex-1 items-center gap-2 leading-none">
           <img
             src={logo}
-            alt="Monsters CCJ logo"
+            alt="Monsters Cards logo"
             width={36}
             height={36}
             className="size-9 shrink-0 rounded-xl drop-shadow-[0_4px_10px_rgba(30,27,75,0.35)]"
           />
           <div className="min-w-0">
             <div className="truncate font-display text-[13px] font-extrabold sm:text-[15px]">
-              MONSTERS CCJ
+              MONSTERS CARDS
             </div>
             <div className="mt-0.5 truncate text-[8px] font-bold uppercase tracking-[0.12em] text-dim">
               {t("shell.hub")}
