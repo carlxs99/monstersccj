@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 /** Telegram bot webhook: commands + Mini App launch button. */
 
-const APP_URL = "https://monstersccj.lovable.app";
+const APP_URL = "https://monstercards.lovable.app";
 
 type Update = {
   update_id: number;
