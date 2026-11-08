@@ -34,7 +34,7 @@ export function AppShell({
           />
           <div className="min-w-0">
             <div className="truncate font-display text-[13px] font-extrabold sm:text-[15px]">
-              MONSTERS CCJ
+              MONSTERS CARDS
             </div>
             <div className="mt-0.5 truncate text-[8px] font-bold uppercase tracking-[0.12em] text-dim">
               {t("shell.hub")}
