@@ -269,7 +269,7 @@ export const requestWithdrawal = createServerFn({ method: "POST" })
 
     let hash: string;
     try {
-      hash = await sendTon(address, net, "Monsters JCC Payout");
+      hash = await sendTon(address, net, "Monsters Cards");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Payout failed";
       const { TonSendUncertainError } = await import("./ton.server");
