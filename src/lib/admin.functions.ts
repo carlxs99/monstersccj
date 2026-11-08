@@ -278,6 +278,18 @@ export const adminSaveTask = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await adminCtx(data.initData);
+    if (data.kind !== "bot") {
+      // Membership checks only work where the bot is an admin of the chat.
+      const { botApi } = await import("./telegram.server");
+      const me = (await botApi("getMe", {})) as { result?: { id?: number } };
+      const res = (await botApi("getChatMember", {
+        chat_id: (data.chatRef ?? "").trim(),
+        user_id: me.result?.id ?? 0,
+      })) as { ok: boolean; result?: { status?: string } };
+      if (!res.ok || !["administrator", "creator"].includes(res.result?.status ?? "")) {
+        throw new Error("Add the bot as admin of that channel/group first, so it can verify members");
+      }
+    }
     const row = {
       kind: data.kind,
       title: data.title.trim().slice(0, 120),
