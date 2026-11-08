@@ -1,7 +1,7 @@
 /** One-shot bot configuration: webhook, menu button and commands. */
 export async function setupTelegramBot() {
   const { botApi } = await import("./telegram.server");
-  const appUrl = "https://monstersccj.lovable.app";
+  const appUrl = "https://monstercards.lovable.app";
   const webhookUrl = "https://project--e2fc5d41-efed-457b-8a8a-3840e26bbe3e-dev.lovable.app";
   const secret = process.env["TELEGRAM_WEBHOOK_SECRET"];
 
