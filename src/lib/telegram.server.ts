@@ -124,7 +124,7 @@ export async function notifyUser(telegramId: number, text: string) {
 
 
 /** Public channel where every successful payout is announced. */
-export const PAYOUTS_CHANNEL = "@monsterspayouts";
+export const PAYOUTS_CHANNEL = "@mosnstercardspayouts";
 
 function escapeHtml(value: string) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

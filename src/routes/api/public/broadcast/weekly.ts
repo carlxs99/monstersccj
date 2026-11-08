@@ -8,7 +8,7 @@ import { postForWeek, weekKey } from "@/lib/channel-posts";
  * that week (the week row in channel_post_runs is the idempotency key).
  */
 
-const CHANNEL = "@monsterccj";
+const CHANNEL = "@monstercardsnews";
 const APP_URL = "https://t.me/MonstersCardsBot/app";
 
 export const Route = createFileRoute("/api/public/broadcast/weekly")({
