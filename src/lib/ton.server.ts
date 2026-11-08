@@ -134,7 +134,7 @@ export async function sendTon(to: string, amount: number, comment: string): Prom
 
   const words = mnemonic.trim().split(/\s+/);
   const keys = await mnemonicToPrivateKey(words);
-  const wallet = ton.WalletContractV5R1.create({ workChain: 0, publicKey: keys.publicKey });
+  const wallet = ton.WalletContractV5R1.create({ publicKey: keys.publicKey });
   const address = wallet.address.toString({ bounceable: false, urlSafe: true });
 
   // toncenter v3 returns the wallet object directly; older shapes nest it in `wallets`.
