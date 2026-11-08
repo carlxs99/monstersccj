@@ -1,6 +1,6 @@
 /** Server-only TON blockchain helpers: deposit scanning and payouts. */
 
-export const DEPOSIT_ADDRESS = "UQBtZr7CehYj3mVActM3gr1MhU3K7NkdMdAKEjIQ6rrJR4RP";
+export const DEPOSIT_ADDRESS = "UQC7eXeZQOsxQxFJod4IFrqW9PkKwX-CAxHFONlDVsugk6eq";
 export const WITHDRAW_FEE_RATE = 0.05;
 export const MIN_WITHDRAW = 0.5;
 /** Safety ceiling for a single automated payout. */
@@ -134,7 +134,7 @@ export async function sendTon(to: string, amount: number, comment: string): Prom
 
   const words = mnemonic.trim().split(/\s+/);
   const keys = await mnemonicToPrivateKey(words);
-  const wallet = ton.WalletContractV5R1.create({ publicKey: keys.publicKey });
+  const wallet = ton.WalletContractV4.create({ workchain: 0, publicKey: keys.publicKey });
   const address = wallet.address.toString({ bounceable: false, urlSafe: true });
 
   // toncenter v3 returns the wallet object directly; older shapes nest it in `wallets`.
