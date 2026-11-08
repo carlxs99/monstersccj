@@ -11,7 +11,7 @@ export const Route = createFileRoute("/api/public/tonconnect-manifest")({
         return new Response(
           JSON.stringify({
             url: origin,
-            name: "Monsters CCJ",
+            name: "Monsters Cards",
             iconUrl: `${origin}/favicon.png`,
           }),
           {

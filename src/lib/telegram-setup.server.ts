@@ -19,7 +19,7 @@ export async function setupTelegramBot() {
 
   await botApi("setMyCommands", {
     commands: [
-      { command: "start", description: "Open Monsters CCJ" },
+      { command: "start", description: "Open Monsters Cards" },
       { command: "stats", description: "Your collection summary" },
       { command: "invite", description: "Your referral code" },
       { command: "help", description: "Bot commands" },

@@ -14,14 +14,14 @@ import {
 export const Route = createFileRoute("/leaderboard")({
   head: () => ({
     meta: [
-      { title: "Leaderboard — Monsters CCJ" },
+      { title: "Leaderboard — Monsters Cards" },
       {
         name: "description",
         content:
           "Top 100 collectors ranked by collection score, legendaries owned, total cards and player level.",
       },
-      { property: "og:title", content: "Leaderboard — Monsters CCJ" },
-      { property: "og:description", content: "Top 100 collectors of Monsters CCJ." },
+      { property: "og:title", content: "Leaderboard — Monsters Cards" },
+      { property: "og:description", content: "Top 100 collectors of Monsters Cards." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

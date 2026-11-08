@@ -12,7 +12,7 @@ const CHUNK = 20;
 const CHUNK_PAUSE_MS = 1100;
 const LOCK_MS = 3 * 60 * 1000;
 
-const APP_URL = "https://t.me/Monstersccjbot/app";
+const APP_URL = "https://t.me/MonstersCardsBot/app";
 
 const TEXT =
   "\u23f0 <b>Your GRAM is piling up!</b>\n\n" +

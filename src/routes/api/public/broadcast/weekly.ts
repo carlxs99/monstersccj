@@ -9,7 +9,7 @@ import { postForWeek, weekKey } from "@/lib/channel-posts";
  */
 
 const CHANNEL = "@monsterccj";
-const APP_URL = "https://t.me/Monstersccjbot/app";
+const APP_URL = "https://t.me/MonstersCardsBot/app";
 
 export const Route = createFileRoute("/api/public/broadcast/weekly")({
   server: {

@@ -14,13 +14,13 @@ import { useT } from "@/lib/i18n";
 export const Route = createFileRoute("/collection")({
   head: () => ({
     meta: [
-      { title: "Collection — Monsters CCJ" },
+      { title: "Collection — Monsters Cards" },
       {
         name: "description",
         content:
           "Track every original creature and trainer card you discover, including levels, rarity and collection progress.",
       },
-      { property: "og:title", content: "Collection — Monsters CCJ" },
+      { property: "og:title", content: "Collection — Monsters Cards" },
       {
         property: "og:description",
         content: "Your album of original creature and trainer cards across five rarities.",

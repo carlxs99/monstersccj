@@ -27,7 +27,7 @@ export function AppShell({
         <Link to="/" className="flex min-w-0 flex-1 items-center gap-2 leading-none">
           <img
             src={logo}
-            alt="Monsters CCJ logo"
+            alt="Monsters Cards logo"
             width={36}
             height={36}
             className="size-9 shrink-0 rounded-xl drop-shadow-[0_4px_10px_rgba(30,27,75,0.35)]"
