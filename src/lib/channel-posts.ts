@@ -178,7 +178,7 @@ export const CHANNEL_POSTS: ChannelPost[] = [
     "\ud83d\udcb3 Open wallet",
   ),
   p(
-    "\ud83e\uddfe <b>Payout proof</b>\n\nEvery completed withdrawal is announced publicly in our payouts channel.\nNo screenshots, no promises — just on-chain receipts.\n\n\ud83d\udc49 @monsterspayouts",
+    "\ud83e\uddfe <b>Payout proof</b>\n\nEvery completed withdrawal is announced publicly in our payouts channel.\nNo screenshots, no promises — just on-chain receipts.\n\n\ud83d\udc49 @mosnstercardspayouts",
     "\ud83d\udcb3 My wallet",
   ),
   q("What matters most to you in a Telegram game?", [
