@@ -35,7 +35,14 @@ export async function showRewardedAd(): Promise<void> {
   const show = await waitForSdk();
   if (!show) return;
   try {
-    await show();
+    // Hard cap: if the SDK never resolves (hangs, ad closed via Telegram
+    // back button, etc.), return control to the app anyway so the claim
+    // flow always continues and the user is never stuck on the ad.
+    const MAX_AD_MS = 60_000;
+    await Promise.race([
+      show(),
+      new Promise<void>((resolve) => window.setTimeout(resolve, MAX_AD_MS)),
+    ]);
   } catch {
     // Ignore ad errors: the user should still be able to claim.
   }
