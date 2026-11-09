@@ -235,10 +235,15 @@ export const adminTasks = createServerFn({ method: "POST" })
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: true });
 
-    const { data: done } = await supabaseAdmin
-      .from("custom_task_progress")
-      .select("task_id")
-      .not("claimed_at", "is", null);
+    const { data: done } = await fetchAllRows((a, b) =>
+      supabaseAdmin
+        .from("custom_task_progress")
+        .select("task_id")
+        .not("claimed_at", "is", null)
+        .order("task_id")
+        .order("telegram_id")
+        .range(a, b),
+    );
 
     const counts = new Map<string, number>();
     for (const row of done ?? []) {
@@ -415,11 +420,16 @@ export const adminReferrers = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await adminCtx(data.initData);
 
     const [{ data: rows }, { data: deposits }] = await Promise.all([
-      supabaseAdmin
-        .from("players")
-        .select("telegram_id, username, first_name, referred_by, banned, state, created_at")
-        .limit(20000),
-      supabaseAdmin.from("ton_deposits").select("telegram_id, amount").limit(20000),
+      fetchAllRows((a, b) =>
+        supabaseAdmin
+          .from("players")
+          .select("telegram_id, username, first_name, referred_by, banned, state, created_at")
+          .order("telegram_id")
+          .range(a, b),
+      ),
+      fetchAllRows((a, b) =>
+        supabaseAdmin.from("ton_deposits").select("telegram_id, amount").order("id").range(a, b),
+      ),
     ]);
 
     type P = {
@@ -529,11 +539,14 @@ export const adminBroadcast = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await adminCtx(data.initData);
     const { notifyUser } = await import("./telegram.server");
 
-    const { data: rows } = await supabaseAdmin
-      .from("players")
-      .select("telegram_id")
-      .eq("banned", false)
-      .limit(5000);
+    const { data: rows } = await fetchAllRows((a, b) =>
+      supabaseAdmin
+        .from("players")
+        .select("telegram_id")
+        .eq("banned", false)
+        .order("telegram_id")
+        .range(a, b),
+    );
 
     let sent = 0;
     for (const row of rows ?? []) {
@@ -601,11 +614,15 @@ export const adminMultiAccounts = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<AdminIpGroup[]> => {
     const { supabaseAdmin } = await adminCtx(data.initData);
 
-    const { data: rows } = await supabaseAdmin
-      .from("player_ips")
-      .select("ip, telegram_id, last_seen")
-      .order("last_seen", { ascending: false })
-      .limit(5000);
+    const { data: rows } = await fetchAllRows((a, b) =>
+      supabaseAdmin
+        .from("player_ips")
+        .select("ip, telegram_id, last_seen")
+        .order("last_seen", { ascending: false })
+        .order("ip")
+        .order("telegram_id")
+        .range(a, b),
+    );
 
     const byIp = new Map<string, Array<{ telegramId: number; lastSeen: string }>>();
     for (const row of rows ?? []) {
@@ -621,16 +638,29 @@ export const adminMultiAccounts = createServerFn({ method: "POST" })
     const ids = [...new Set(shared.flatMap(([, list]) => list.map((x) => x.telegramId)))];
     if (!ids.length) return [];
 
+    const inChunks = async (q: (chunk: number[]) => PromiseLike<{ data: any[] | null; error: any }>) => {
+      const out: any[] = [];
+      for (let i = 0; i < ids.length; i += 200) {
+        const { data: d, error } = await q(ids.slice(i, i + 200));
+        if (error) throw new Error(error.message);
+        out.push(...(d ?? []));
+      }
+      return { data: out };
+    };
     const [{ data: players }, { data: deposits }, { data: withdrawals }] = await Promise.all([
-      supabaseAdmin
-        .from("players")
-        .select("telegram_id, username, first_name, banned, created_at, referred_by, state, ton_address")
-        .in("telegram_id", ids),
-      supabaseAdmin.from("ton_deposits").select("telegram_id, amount").in("telegram_id", ids),
-      supabaseAdmin
-        .from("withdrawals")
-        .select("telegram_id, net, to_address, status")
-        .in("telegram_id", ids),
+      inChunks((c) =>
+        supabaseAdmin
+          .from("players")
+          .select("telegram_id, username, first_name, banned, created_at, referred_by, state, ton_address")
+          .in("telegram_id", c),
+      ),
+      inChunks((c) => supabaseAdmin.from("ton_deposits").select("telegram_id, amount").in("telegram_id", c)),
+      inChunks((c) =>
+        supabaseAdmin
+          .from("withdrawals")
+          .select("telegram_id, net, to_address, status")
+          .in("telegram_id", c),
+      ),
     ]);
 
     const info = new Map<number, any>();
