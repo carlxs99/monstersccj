@@ -362,6 +362,11 @@ async function evaluateCluster(admin: Admin, rootId: number): Promise<void> {
     ) {
       score += 2;
     }
+    // Invited by the same outside inviter as another account on the same
+    // network: the classic farm run from one device feeding one referrer.
+    if (acc.referredBy != null && shares.some((o) => o.referredBy === acc.referredBy)) {
+      score += 2;
+    }
     // A referral chain where nobody ever bought a pack.
     const kids = emptyChildren.get(acc.id);
     if (kids && kids.total >= 5 && kids.withPack === 0) score += 2;
