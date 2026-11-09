@@ -165,12 +165,25 @@ export async function referralNetwork(admin: Admin, rootId: number) {
   const seen = new Set<number>([rootId]);
   const level = async (parents: number[]) => {
     if (!parents.length) return [] as Array<{ id: number; packs: number }>;
-    const { data: rows } = await admin
-      .from("players")
-      .select("telegram_id, state")
-      .in("referred_by", parents);
+    // Chunk parent ids (URL length) and paginate (1000-row API cap) so big
+    // networks are counted in full.
+    const rows: unknown[] = [];
+    for (let c = 0; c < parents.length; c += 200) {
+      const chunk = parents.slice(c, c + 200);
+      for (let from = 0; ; from += 1000) {
+        const { data, error } = await admin
+          .from("players")
+          .select("telegram_id, state")
+          .in("referred_by", chunk)
+          .order("telegram_id", { ascending: true })
+          .range(from, from + 999);
+        if (error) throw new Error(error.message);
+        rows.push(...(data ?? []));
+        if (!data || data.length < 1000) break;
+      }
+    }
     const out: Array<{ id: number; packs: number }> = [];
-    for (const r of rows ?? []) {
+    for (const r of rows) {
       const id = Number((r as { telegram_id: number }).telegram_id);
       if (seen.has(id)) continue;
       seen.add(id);
