@@ -60,9 +60,9 @@ export const adminOverview = createServerFn({ method: "POST" })
         .from("custom_tasks")
         .select("id", { count: "exact", head: true })
         .eq("active", true),
-      supabaseAdmin.from("ton_deposits").select("amount"),
-      supabaseAdmin.from("withdrawals").select("amount, status"),
-      supabaseAdmin.from("players").select("state"),
+      fetchAllRows((a, b) => supabaseAdmin.from("ton_deposits").select("amount").order("id").range(a, b)),
+      fetchAllRows((a, b) => supabaseAdmin.from("withdrawals").select("amount, status").order("id").range(a, b)),
+      fetchAllRows((a, b) => supabaseAdmin.from("players").select("state").order("telegram_id").range(a, b)),
     ]);
 
     let gram = 0;
@@ -104,6 +104,20 @@ export const adminOverview = createServerFn({ method: "POST" })
       activeTasks: tasks.count ?? 0,
     };
   });
+
+async function fetchAllRows(
+  page: (from: number, to: number) => PromiseLike<{ data: any[] | null; error: any }>,
+): Promise<{ data: any[] }> {
+  const out: any[] = [];
+  const size = 1000;
+  for (let from = 0; ; from += size) {
+    const { data, error } = await page(from, from + size - 1);
+    if (error) throw new Error(error.message);
+    out.push(...(data ?? []));
+    if (!data || data.length < size) break;
+  }
+  return { data: out };
+}
 
 export type AdminPlayer = {
   telegramId: number;
