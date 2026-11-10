@@ -55,16 +55,31 @@ export const Route = createFileRoute("/api/public/broadcast/daily")({
           .maybeSingle();
         if (!leased) return Response.json({ ok: true, skipped: "locked" });
 
-        const { data: sentRows } = await supabaseAdmin
-          .from("broadcast_sends")
-          .select("telegram_id")
-          .eq("day", day);
-        const already = new Set((sentRows ?? []).map((r) => Number(r.telegram_id)));
+        // PostgREST caps responses at 1,000 rows: page through everything.
+        const PAGE = 1000;
+        const sentRows: { telegram_id: number }[] = [];
+        for (let from = 0; ; from += PAGE) {
+          const { data } = await supabaseAdmin
+            .from("broadcast_sends")
+            .select("telegram_id")
+            .eq("day", day)
+            .order("telegram_id", { ascending: true })
+            .range(from, from + PAGE - 1);
+          sentRows.push(...((data ?? []) as { telegram_id: number }[]));
+          if (!data || data.length < PAGE) break;
+        }
+        const already = new Set(sentRows.map((r) => Number(r.telegram_id)));
 
-        const { data: players } = await supabaseAdmin
-          .from("players")
-          .select("telegram_id")
-          .order("telegram_id", { ascending: true });
+        const players: { telegram_id: number }[] = [];
+        for (let from = 0; ; from += PAGE) {
+          const { data } = await supabaseAdmin
+            .from("players")
+            .select("telegram_id")
+            .order("telegram_id", { ascending: true })
+            .range(from, from + PAGE - 1);
+          players.push(...((data ?? []) as { telegram_id: number }[]));
+          if (!data || data.length < PAGE) break;
+        }
 
         const targets = (players ?? [])
           .map((p) => Number(p.telegram_id))
