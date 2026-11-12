@@ -105,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         src: "https://libtl.com/sdk.js",
         "data-zone": "11761325",
-        "data-sdk": "show_11761325",
+        "data-sdk": "show_12247409",
       },
     ],
   }),
