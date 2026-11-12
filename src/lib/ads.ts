@@ -5,7 +5,7 @@
  * "continue" button, which returns control to the app.
  */
 
-const SDK_FN = "show_11761325";
+const SDK_FN = "show_12247409";
 
 type ShowFn = () => Promise<unknown>;
 
