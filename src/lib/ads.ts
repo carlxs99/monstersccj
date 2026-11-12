@@ -31,7 +31,48 @@ async function waitForSdk(timeoutMs = 4000): Promise<ShowFn | null> {
  * the caller can grant the reward. Never blocks the reward if ads are
  * unavailable (blocked, offline, slow SDK).
  */
+const DIRECT_LINK = "https://uplcm.com/4/12247434";
+const TURN_KEY = "mc_ad_turn";
+
+/** Opens the direct-link ad outside the app and resolves when the user comes back. */
+async function showDirectLink(): Promise<void> {
+  const tg = (window as unknown as { Telegram?: { WebApp?: { openLink?: (u: string) => void } } }).Telegram?.WebApp;
+  try {
+    if (tg?.openLink) tg.openLink(DIRECT_LINK);
+    else window.open(DIRECT_LINK, "_blank", "noopener");
+  } catch {
+    return;
+  }
+  // Wait until the user returns to the app (page visible again), max 60 s.
+  await new Promise<void>((resolve) => {
+    let left = false;
+    const done = () => {
+      document.removeEventListener("visibilitychange", onVis);
+      window.clearTimeout(t);
+      resolve();
+    };
+    const onVis = () => {
+      if (document.visibilityState === "hidden") left = true;
+      else if (left) done();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    const t = window.setTimeout(done, 60_000);
+    // If the app never got hidden (link opened in-place overlay), continue after 3 s.
+    window.setTimeout(() => { if (!left) done(); }, 3000);
+  });
+}
+
 export async function showRewardedAd(): Promise<void> {
+  if (typeof window === "undefined") return;
+  let turn = 0;
+  try {
+    turn = Number(localStorage.getItem(TURN_KEY) || "0");
+    localStorage.setItem(TURN_KEY, String(turn + 1));
+  } catch { /* ignore */ }
+  if (turn % 2 === 1) {
+    await showDirectLink();
+    return;
+  }
   const show = await waitForSdk();
   if (!show) return;
   try {
