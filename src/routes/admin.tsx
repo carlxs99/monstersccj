@@ -188,17 +188,49 @@ function AdminPage() {
 
 function OverviewTab({ onError }: { onError: (m: string) => void }) {
   const [data, setData] = useState<AdminOverview | null>(null);
+  const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const load = useCallback(() => {
+    setLoading(true);
+    adminOverview({ data: { initData: initData() } })
+      .then((d) => {
+        setData(d);
+        setUpdatedAt(new Date());
+      })
+      .catch((e) => onError(e instanceof Error ? e.message : "Could not load stats"))
+      .finally(() => setLoading(false));
+  }, [onError]);
 
   useEffect(() => {
-    adminOverview({ data: { initData: initData() } })
-      .then(setData)
-      .catch((e) => onError(e instanceof Error ? e.message : "Could not load stats"));
-  }, [onError]);
+    load();
+    const id = setInterval(() => {
+      if (document.visibilityState === "visible") load();
+    }, 30_000);
+    const onVis = () => document.visibilityState === "visible" && load();
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [load]);
 
   if (!data) return <Loader2 className="mx-auto animate-spin text-dim" aria-hidden="true" />;
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between text-xs text-dim">
+        <span>Updated {updatedAt?.toLocaleTimeString()} · auto every 30s</span>
+        <button
+          type="button"
+          onClick={load}
+          disabled={loading}
+          className="rounded-md border border-border px-2 py-1 text-foreground disabled:opacity-50"
+        >
+          {loading ? "Refreshing…" : "Refresh"}
+        </button>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
       <Stat label="Players" value={data.players} />
       <Stat label="New (24h)" value={data.newToday} />
       <Stat label="GRAM in wallets" value={data.gramCirculating.toFixed(2)} />
@@ -212,6 +244,7 @@ function OverviewTab({ onError }: { onError: (m: string) => void }) {
       <Stat label="Withdrawals failed (refunded)" value={data.withdrawals.failed} />
       <Stat label="Active tasks" value={data.activeTasks} />
       <Stat label="Banned" value={data.banned} />
+      </div>
     </div>
   );
 }
